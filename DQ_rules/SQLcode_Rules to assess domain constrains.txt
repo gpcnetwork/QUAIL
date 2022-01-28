@@ -1,0 +1,58 @@
+Query name : Rules to assess domain constraints
+purpose: To assess the quality of PCORNet CDM 
+Author name : Yahia Mohamed 
+
+1.Demographic data element 
+
+///*The number of whole patients *//---2,278,706
+select count (distinct patid) from PCORNET_CDM.CDM_C010R022.PRIVATE_DEMOGRAPHIC 
+;
+///*The number of records with discrepancies*///---59
+
+select * from PCORNET_CDM.CDM_C010R022.PRIVATE_DEMOGRAPHIC
+where birth_date> '15-DEC-2021';
+
+///*The number of patients with discrepancy*///---59
+select count (distinct patid) from PCORNET_CDM.CDM_C010R022.PRIVATE_DEMOGRAPHIC 
+where birth_date < '01-JAN-1850';
+
+
+2.Observations data element(height, weight, blood pressure values)
+
+//*The number of the whole cohort *//---781,911
+ select count (distinct patid) from PCORNET_CDM.CDM_C010R022.PRIVATE_VITAL;
+
+///*the number of records with discrepancies*///----30,078
+with boimeterict as (select  patid, ht, wt , diastolic, systolic from  PCORNET_CDM.CDM_C010R022.PRIVATE_VITAL
+where ht < 10 or ht > 300 and  wt < 2.2 or  wt > 660 
+union all 
+select patid, ht, wt , diastolic, systolic from  PCORNET_CDM.CDM_C010R022.PRIVATE_VITAL
+where diastolic < 20 or diastolic > 350 and systolic < 20 or systolic >350 ) select * from boimeterict;
+
+//*Count of patients with discrepancy*//---12576
+with boimeterict as (select  patid , ht, wt , diastolic, systolic from  PCORNET_CDM.CDM_C010R022.PRIVATE_VITAL
+where ht < 10 or ht > 300 and  wt < 2.2 or  wt > 660 
+union all 
+select  patid, ht, wt , diastolic, systolic from  PCORNET_CDM.CDM_C010R022.PRIVATE_VITAL
+where diastolic < 20 or diastolic > 350 and systolic < 20 or systolic >350 ) select count (distinct patid) from boimeterict;
+
+3.Valid lab values Lab_Valid_CHECKING 
+
+
+//*The number of whole cohort*//---379,323
+select count (distinct l.patid)
+from PCORNET_CDM.CDM_C010R022.LAB_RESULT_CM l
+join ANALYTICSDB.QARULES.LAB_VALID_CHECKINGI v on loinc_code = l.lab_loinc; 
+
+//*The number of records with discrepancies*//----378,077
+select distinct l.patid , l.lab_loinc,  l.result_num, l.result_unit,raw_lab_name , v.lab_test, v. valid_low, v.valid_high, v.units, v.loinc_code 
+from PCORNET_CDM.CDM_C010R022.LAB_RESULT_CM l
+join ANALYTICSDB.QARULES.LAB_VALID_CHECKINGI v on V.loinc_code = l.lab_loinc
+where l.result_num < v.valid_low or l.result_num > valid_high or l.result_unit <> v.units; 
+
+//*The number of patients with discrepancies*// ---208,943
+
+select count (distinct l.patid)   
+from PCORNET_CDM.CDM_C010R022.LAB_RESULT_CM l
+join ANALYTICSDB.QARULES.LAB_VALID_CHECKINGI v on loinc_code = l.lab_loinc
+where l.result_num < v.valid_low or l.result_num > valid_high or l.result_unit <> v.units;

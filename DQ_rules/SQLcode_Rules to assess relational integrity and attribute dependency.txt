@@ -1,0 +1,242 @@
+Query name: Rules to assess relational integrity and attribute dependency
+Purpose: to check for quality of PCORnet CDM
+Author: Yahia Mohamed 
+
+1. Age and diagnosis 
+
+//*The whole number of patients *//----1036512
+select  count (distinct d.PATID ) as countp 
+from "PCORNET_CDM"."CDM_C010R021"."DEMOGRAPHIC" as d
+LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS as diagnosis ON d.PATID = diagnosis.PATID
+LEFT JOIN ANALYTICSDB.QARULES.AGE_DX b ON (b.icd9code = diagnosis.dx or b.Alternate_Code = diagnosis.dx  or b.icd10code = diagnosis.dx)
+where dx_type in ('09', '10') 
+;
+//*Number of records with discrepancies*//---11,230
+select  distinct  d.PATID, d.BIRTH_DATE, datediff(YY, d.birth_date, diagnosis.dx_date) as pcor_age,b.Valid_Beginning_Age,b.Valid_End_Age, d.SEX 
+, diagnosis.ENCOUNTERID, diagnosis.DX, diagnosis.raw_diagnosis_name, diagnosis.dx_date
+, diagnosis.ADMIT_DATE,diagnosis.ENCOUNTERID, diagnosis.DX as dx, diagnosis.ADMIT_DATE,b.icd9code,b.icd10code,b.Alternate_Code 
+from "PCORNET_CDM"."CDM_C010R021"."DEMOGRAPHIC" as d
+LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS as diagnosis ON d.PATID = diagnosis.PATID
+LEFT JOIN ANALYTICSDB.QARULES.AGE_DX b ON (b.icd9code = diagnosis.dx or b.Alternate_Code = diagnosis.dx  or b.icd10code = diagnosis.dx)
+where dx_type in ('09', '10') 
+and pcor_age< b.valid_beginning_age or pcor_age>b.valid_end_age
+;
+
+//*Count of patients with discrepancies*//---5411
+ SELECT count (distinct patid ) as coutpd 
+FROM (select  datediff(YY, d.birth_date, diagnosis.dx_date) as pcor_age, d.patid
+from "PCORNET_CDM"."CDM_C010R021"."DEMOGRAPHIC" as d
+LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS as diagnosis ON d.PATID = diagnosis.PATID
+LEFT JOIN ANALYTICSDB.QARULES.AGE_DX b ON (b.icd9code = diagnosis.dx or b.Alternate_Code = diagnosis.dx  or b.icd10code = diagnosis.dx)
+where dx_type in ('09', '10') and pcor_age< b.valid_beginning_age or pcor_age>b.valid_end_age
+);
+
+2. Age and procedure 
+
+//*Whole number of patients*//---904814
+select  count (distinct  d.PATID)
+from "PCORNET_CDM"."CDM_C010R021"."DEMOGRAPHIC" as d
+LEFT JOIN  PCORNET_CDM.CDM_C010R022.PRIVATE_PROCEDURES as pr ON d.PATID = pr.PATID
+LEFT JOIN  ANALYTICSDB.QARULES.AGE_PX b ON (b.cpt_code = pr.px )
+where px_type = 'CH' ;
+
+//*Number of records with discrepancies *//--49,366
+//*for patient with age< valid begin age or  > valid end age*//
+select  distinct  d.PATID, d.BIRTH_DATE, datediff(YY, d.birth_date,pr.px_date ) as pcor_age,b.valid_begin_age,valid_end_age, d.SEX 
+
+, pr.ADMIT_DATE,pr.ENCOUNTERID,pr.raw_procedure_name,pr.px_date, pr.px,b.cpt_code
+from "PCORNET_CDM"."CDM_C010R021"."DEMOGRAPHIC" as d
+LEFT JOIN  PCORNET_CDM.CDM_C010R022.PRIVATE_PROCEDURES as pr ON d.PATID = pr.PATID
+LEFT JOIN  ANALYTICSDB.QARULES.AGE_PX b ON (b.cpt_code = pr.px )
+where px_type = 'CH'
+and pcor_age < b.valid_begin_age or pcor_age > b.valid_end_age;
+
+//*Count of patients with discrepancies*//---27,114
+SELECT count(distinct patid) AS the_sum
+FROM(select  datediff(YY, d.birth_date,pr.px_date ) as pcor_age, d.patid
+from "PCORNET_CDM"."CDM_C010R021"."DEMOGRAPHIC" as d
+LEFT JOIN  PCORNET_CDM.CDM_C010R022.PRIVATE_PROCEDURES as pr ON d.PATID = pr.PATID
+LEFT JOIN  ANALYTICSDB.QARULES.AGE_PX b ON (b.cpt_code = pr.px )
+where px_type = 'CH'and pcor_age < b.valid_begin_age or pcor_age > b.valid_end_age
+
+);
+
+3. Gender and diagnosis
+//*The number of whole cohort of patients admitted after Jan/01*//----321264
+select count (distinct d.patid) as patient_count 
+from PCORNET_CDM.CDM_C010R022.PRIVATE_DEMOGRAPHIC d
+left join PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS dx on d.patid = dx.patid
+left join ANALYTICSDB.QARULES.GENDER_DX b on (b.icd9code = dx.dx or b.icd10code = dx.dx)
+where dx.dx_type in ('09','10') 
+and (dx.DX_DATE > '01-JAN-2020' or dx.ADMIT_DATE > '01-JAN-2020')
+;
+
+//*Number of records that have discrepancy *//
+select d.patid, d.birth_date,d.sex as pecornet_gender, b.invalid_gender as qa_gender,dx.encounterid,dx.dx_date,dx.admit_date,dx.raw_diagnosis_name, 
+dx.dx,b.icd9code,b.icd10code,b.concept_name
+from PCORNET_CDM.CDM_C010R022.PRIVATE_DEMOGRAPHIC d
+left join PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS dx on d.patid = dx.patid
+left join ANALYTICSDB.QARULES.GENDER_DX b on (b.icd9code = dx.dx or b.icd10code = dx.dx)
+where dx.dx_type in ('09','10') 
+and (dx.DX_DATE > '01-JAN-2020' or dx.ADMIT_DATE > '01-JAN-2020')
+and d.sex = b.invalid_gender;
+
+//*Number of patients with discrepancies*//----14478
+select count (distinct d.patid) as patient_count 
+from PCORNET_CDM.CDM_C010R022.PRIVATE_DEMOGRAPHIC d
+left join PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS dx on d.patid = dx.patid
+left join ANALYTICSDB.QARULES.GENDER_DX b on (b.icd9code = dx.dx or b.icd10code = dx.dx)
+where dx.dx_type in ('09','10') 
+and (dx.DX_DATE > '01-JAN-2020' or dx.ADMIT_DATE > '01-JAN-2020')
+and d.sex = b.invalid_gender;
+
+4.Gender and procedure
+
+///***whole number of patients ***///---- 904814
+select  count (distinct d.patid) 
+ from "PCORNET_CDM"."CDM_C010R021"."DEMOGRAPHIC" as d
+LEFT JOIN  PCORNET_CDM.CDM_C010R022.PRIVATE_PROCEDURES as pr ON d.PATID = pr.PATID
+LEFT JOIN ANALYTICSDB.QARULES.GENDER_PX b ON (b.cpt_code = pr.px )
+where px_type = 'CH' 
+ ;
+
+///**Number of records with discrepancies**//---465
+select  distinct d.patid,d.sex ,pr.px,pr.raw_procedure_name,  b.cpt_code, b.invalid_gender, b. description
+ from "PCORNET_CDM"."CDM_C010R021"."DEMOGRAPHIC" as d
+LEFT JOIN  PCORNET_CDM.CDM_C010R022.PRIVATE_PROCEDURES as pr ON d.PATID = pr.PATID
+LEFT JOIN ANALYTICSDB.QARULES.GENDER_PX b ON (b.cpt_code = pr.px )
+where px_type = 'CH'
+and d.sex = b.invalid_gender
+;
+
+//*Number of patients with discrepancies*//---358
+select  count (distinct  d.PATID)
+from "PCORNET_CDM"."CDM_C010R021"."DEMOGRAPHIC" as d
+LEFT JOIN  PCORNET_CDM.CDM_C010R022.PRIVATE_PROCEDURES as pr ON d.PATID = pr.PATID
+LEFT JOIN ANALYTICSDB.QARULES.GENDER_PX b ON (b.cpt_code = pr.px )
+where px_type = 'CH' 
+and d.sex = b.invalid_gender
+;
+
+5. Drug and diagnosis 
+
+//*Number of whole patients *//----1,036,512
+ SELECT count (distinct patid) AS countp
+FROM (select  datediff(YY, d.birth_date, diagnosis.dx_date) as pcor_age, d.patid
+from "PCORNET_CDM"."CDM_C010R021"."DEMOGRAPHIC" as d
+LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS as diagnosis ON d.PATID = diagnosis.PATID
+LEFT JOIN ANALYTICSDB.QARULES.AGE_DX b ON (b.icd9code = diagnosis.dx or b.Alternate_Code = diagnosis.dx  or b.icd10code = diagnosis.dx)
+where dx_type in ('09', '10')  
+ );
+
+//*The number of records with discrepancies*//---11,230
+select  distinct  d.PATID, d.BIRTH_DATE, datediff(YY, d.birth_date, diagnosis.dx_date) as pcor_age,b.Valid_Beginning_Age,b.Valid_End_Age, d.SEX 
+, diagnosis.ENCOUNTERID, diagnosis.DX, diagnosis.raw_diagnosis_name, diagnosis.dx_date
+, diagnosis.ADMIT_DATE,diagnosis.ENCOUNTERID, diagnosis.DX as dx, diagnosis.ADMIT_DATE,b.icd9code,b.icd10code,b.Alternate_Code 
+from "PCORNET_CDM"."CDM_C010R021"."DEMOGRAPHIC" as d
+LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS as diagnosis ON d.PATID = diagnosis.PATID
+LEFT JOIN ANALYTICSDB.QARULES.AGE_DX b ON (b.icd9code = diagnosis.dx or b.Alternate_Code = diagnosis.dx  or b.icd10code = diagnosis.dx)
+where dx_type in ('09', '10') 
+and pcor_age< b.valid_beginning_age or pcor_age>b.valid_end_age
+;
+
+//*Number of patients with discrepancies*//---5411
+ SELECT count (distinct patid ) as coutpd 
+FROM (select  datediff(YY, d.birth_date, diagnosis.dx_date) as pcor_age, d.patid
+from "PCORNET_CDM"."CDM_C010R021"."DEMOGRAPHIC" as d
+LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS as diagnosis ON d.PATID = diagnosis.PATID
+LEFT JOIN ANALYTICSDB.QARULES.AGE_DX b ON (b.icd9code = diagnosis.dx or b.Alternate_Code = diagnosis.dx  or b.icd10code = diagnosis.dx)
+where dx_type in ('09', '10') and pcor_age< b.valid_beginning_age or pcor_age>b.valid_end_age
+);
+
+6. Inpatient only procedure
+
+//*Number of whole patients*//---913,712
+select count (distinct p.patid) from PCORNET_CDM.CDM_C010R022.PRIVATE_PROCEDURES p
+left join ANALYTICSDB.QARULES.IPO ad on ad.ipo_cpt_code = p.px
+where   p.enc_type not in ('IP','EI')  ;
+
+//*Number of records with discrepancies *//--14,144
+select distinct p.patid,p.enc_type, p.raw_procedure_name  from PCORNET_CDM.CDM_C010R022.PRIVATE_PROCEDURES p
+left join ANALYTICSDB.QARULES.IPO ad on ad.ipo_cpt_code = p.px
+where  p.px = ad.ipo_cpt_code  and  p.enc_type not in ('IP','EI')  ;
+
+//*Number of patients with discrepancies*//---12,406
+select count (distinct p.patid)from PCORNET_CDM.CDM_C010R022.PRIVATE_PROCEDURES p
+left join ANALYTICSDB.QARULES.IPO ad on ad.ipo_cpt_code = p.px
+where  p.px = ad.ipo_cpt_code and p.enc_type not in ('IP','EI')  ;
+
+7. Diagnosis and lab 
+
+//*Number of whole patients *//---42,459
+select count  (distinct d.patid) as total from PCORNET_CDM.CDM_C010R022.PRIVATE_LAB_RESULT_CM l
+left join PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS d on d.patid = l.patid
+left join ANALYTICSDB.QARULES.DX_LABII xl 
+where d.dx = xl.icd and l.lab_loinc in ('4548-4','41653-7','2339-0','2345-7','32016-8') ;
+
+//*Number of records with dicrepancies *//---87,736
+select count (distinct d.patid) as total from PCORNET_CDM.CDM_C010R022.PRIVATE_LAB_RESULT_CM l
+left join PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS d on d.patid = l.patid
+left join ANALYTICSDB.QARULES.DX_LABII xl 
+where d.dx = xl.icd and  l.patid not in 
+(select l.patid from PCORNET_CDM.CDM_C010R022.PRIVATE_LAB_RESULT_CM l where l.lab_loinc in ('4548-4','41653-7','2339-0','2345-7','32016-8')) ;
+
+//*Number of patients with dicrepancies *//---1084
+select count (distinct d.patid) as total from PCORNET_CDM.CDM_C010R022.PRIVATE_LAB_RESULT_CM l
+left join PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS d on d.patid = l.patid
+left join ANALYTICSDB.QARULES.DX_LABII xl 
+where d.dx = xl.icd and  l.patid not in 
+(select l.patid from PCORNET_CDM.CDM_C010R022.PRIVATE_LAB_RESULT_CM l where l.lab_loinc in ('4548-4','41653-7','2339-0','2345-7','32016-8')) ;
+
+8. Drug and lab  
+
+//*Number of whole patients*//---59856
+select count (distinct pp.patid)   from PCORNET_CDM.CDM_C010R022.PRIVATE_PRESCRIBING pp
+left join PCORNET_CDM.CDM_C010R022.PRIVATE_LAB_RESULT_CM l on l.patid = pp.patid
+where RAW_RXNORM_CUI in ('37801','6851','8640') 
+and l.patid  in (select l.patid from PCORNET_CDM.CDM_C010R022.PRIVATE_LAB_RESULT_CM l 
+                 where l.lab_loinc in ('1743-4','1920-8','1752-5','2160-0','1743-4','1920-8','2324-2','1547-9','17856-6'));
+
+//*Number of records with dicrepancies*//----17,598
+select distinct pp.patid,  pp.encounterid,pp.rxnorm_cui, pp.raw_rx_med_name,pp.RAW_RXNORM_CUI from PCORNET_CDM.CDM_C010R022.PRIVATE_PRESCRIBING pp
+left join PCORNET_CDM.CDM_C010R022.PRIVATE_LAB_RESULT_CM l on l.patid = pp.patid
+where RAW_RXNORM_CUI in ('37801','6851','8640') 
+and l.patid not in (select l.patid from PCORNET_CDM.CDM_C010R022.PRIVATE_LAB_RESULT_CM l 
+                     where l.lab_loinc in ('1743-4','1920-8','1752-5','2160-0','1743-4','1920-8','2324-2','1547-9','17856-6'));
+
+//*Number of patients with dicrepancies*//----11,517
+select  count (distinct pp.patid) from PCORNET_CDM.CDM_C010R022.PRIVATE_PRESCRIBING pp
+left join PCORNET_CDM.CDM_C010R022.PRIVATE_LAB_RESULT_CM l on l.patid = pp.patid
+where RAW_RXNORM_CUI in ('37801','6851','8640') 
+and l.patid not in (select l.patid from PCORNET_CDM.CDM_C010R022.PRIVATE_LAB_RESULT_CM l 
+                     where l.lab_loinc in ('1743-4','1920-8','1752-5','2160-0','1743-4','1920-8','2324-2','1547-9','17856-6'));
+
+9. Drug and continuous procedure
+
+//* Number of whole cohort *//---5079
+select count (distinct p.patid) 
+from PCORNET_CDM.CDM_C010R022.PRIVATE_PRESCRIBING d
+left join PCORNET_CDM.CDM_C010R022.PRIVATE_PROCEDURES p on p.patid = d.patid
+where d.raw_rxnorm_cui in ('202462','5521') and p.patid in (select p.patid from  PCORNET_CDM.CDM_C010R022.PRIVATE_PROCEDURES p where p.px in ('92002' , 
+'92004', '92012', '92014', '92015', '99172', '99173','92018','92019','92225','92226','92230','92240','92250','92284','92003'
+,'99201','99202','99203','99204','99205','99211','99212','99213','99214','992015') ) 
+and datediff(month,d.rx_start_date,p.px_date  )>=0 and datediff(month,d.rx_start_date,p.px_date  )<=24;
+
+//*Number of records with discrepancies*//---63,936
+select count (distinct p.patid) 
+from PCORNET_CDM.CDM_C010R022.PRIVATE_PRESCRIBING d
+left join PCORNET_CDM.CDM_C010R022.PRIVATE_PROCEDURES p on p.patid = d.patid
+where d.raw_rxnorm_cui in ('202462','5521') and p.patid not in (select p.patid from  PCORNET_CDM.CDM_C010R022.PRIVATE_PROCEDURES p where p.px in ('92002' , 
+'92004', '92012', '92014', '92015', '99172', '99173','92018','92019','92225','92226','92230','92240','92250','92284','92003'
+,'99201','99202','99203','99204','99205','99211','99212','99213','99214','992015') ) 
+and datediff(month,d.rx_start_date,p.px_date  )>=0 and datediff(month,d.rx_start_date,p.px_date  )<=24;
+
+//*Number of patients with discrepancies*//---226
+select count (distinct p.patid) 
+from PCORNET_CDM.CDM_C010R022.PRIVATE_PRESCRIBING d
+left join PCORNET_CDM.CDM_C010R022.PRIVATE_PROCEDURES p on p.patid = d.patid
+where d.raw_rxnorm_cui in ('202462','5521') and p.patid not in (select p.patid from  PCORNET_CDM.CDM_C010R022.PRIVATE_PROCEDURES p where p.px in ('92002' , 
+'92004', '92012', '92014', '92015', '99172', '99173','92018','92019','92225','92226','92230','92240','92250','92284','92003'
+,'99201','99202','99203','99204','99205','99211','99212','99213','99214','992015') ) 
+and datediff(month,d.rx_start_date,p.px_date  )>=0 and datediff(month,d.rx_start_date,p.px_date  )<=24;
+

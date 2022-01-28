@@ -1,0 +1,63 @@
+Query name : Rules to assess historical data and state depedent objects
+Purpose: To check the quality of PCORnet CDM
+Author: Yahia Mohamed 
+
+1. Lab time
+
+//*the number of whole cohort*//----14,727
+
+select count (distinct l.patid) from PCORNET_CDM.CDM_C010R022.LAB_RESULT_CM l
+where (l.lab_loinc = '2990-0'or l.lab_loinc = '2991-8' or l.lab_loinc = '2986-8');
+
+///*the number of records with discrepancies **///---28,752
+select distinct l.patid, l.lab_loinc,  l.result_num, l.result_unit,raw_lab_name, l.specimen_time, l.specimen_date , l.lab_order_date from PCORNET_CDM.CDM_C010R022.LAB_RESULT_CM l
+where (l.lab_loinc = '2990-0'or l.lab_loinc = '2991-8' or l.lab_loinc = '2986-8')
+and HOUR( l.specimen_time) >= 10;
+
+
+//*The number of patients with discrepancies*//---11,043
+
+select count(distinct l.patid)  from PCORNET_CDM.CDM_C010R022.LAB_RESULT_CM l
+where (l.lab_loinc = '2990-0'or l.lab_loinc = '2991-8' or l.lab_loinc = '2986-8')
+and HOUR( l.specimen_time) >= 10;
+
+2. Date in future 
+
+///Death_date///
+select distinct patid from PCORNET_CDM.CDM_C010R022.PRIVATE_DEATH;
+select * from  PCORNET_CDM.CDM_C010R022.PRIVATE_DEATH
+
+where DECEASED_DT_TM >=getdate();
+
+///Birth_date////
+select * from  PCORNET_CDM.CDM_C010R022.PRIVATE_DEMOGRAPHIC
+
+where BIRTH_DATE>=getdate();
+
+////Medadmin_start////
+select * from PCORNET_CDM.CDM_C010R022.PRIVATE_MED_ADMIN;
+select * from PCORNET_CDM.CDM_C010R022.PRIVATE_MED_ADMIN
+where medadmin_start_date >=getdate() or medadmin_stop_date   >=getdate();
+
+////Proc_start////
+select * from PCORNET_CDM.CDM_C010R022.PRIVATE_PROCEDURES
+where px_date >=getdate();
+
+3. Procedure duplication 
+///Hysterectomy ////
+select  count  (distinct p.patid) as count  from PCORNET_CDM.CDM_C010R022.PRIVATE_PROCEDURES p where p.px in ('58570','58571','58572','58573','55866');--2847
+
+select  count  (distinct p.patid) as count  from PCORNET_CDM.CDM_C010R022.PRIVATE_PROCEDURES p where p.px in ('58570','58571','58572','58573','55866')
+  group by p.patid having count >1;
+  
+//Leg amputation ////
+select  count  (distinct p.patid) as count  from PCORNET_CDM.CDM_C010R022.PRIVATE_PROCEDURES p where p.px in ('27889')
+   ;---22 
+
+ select  count  (distinct p.patid) as count  from PCORNET_CDM.CDM_C010R022.PRIVATE_PROCEDURES p where p.px in ('27889')
+  group by p.patid having count >1 ;      
+//Prostate removal//
+select  count  (distinct p.patid) as count  from PCORNET_CDM.CDM_C010R022.PRIVATE_PROCEDURES p where p.px in ('55866')
+   ;----480
+select  count  (distinct p.patid) as count  from PCORNET_CDM.CDM_C010R022.PRIVATE_PROCEDURES p where p.px in ('55866')
+  group by p.patid having count >1 ; 

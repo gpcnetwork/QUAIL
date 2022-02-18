@@ -5,7 +5,7 @@
 *Check for number of patients had metformin prescription who have ambulatory visit*
 ```SQL
 SELECT COUNT (DISTINCT p.encounterid) AS encout,     COUNT (DISTINCT p.patid) AS pt, 
-                    e.enc_type 
+                       e.enc_type 
 FROM PCORNET_CDM.CDM_C010R022.PRIVATE_ENCOUNTER e
 LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_PRESCRIBING p ON p.encounterid = e.encounterid
 WHERE  p.raw_rxnorm_cui = '6809'

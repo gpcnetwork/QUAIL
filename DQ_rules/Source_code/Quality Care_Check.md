@@ -1,6 +1,6 @@
 ## Using drug prescriptions and lab orders to check for quality of care 
 
-1.	To check for quality of care for patients who have encounters for ambulatory visit in PCORnet database, we used metformin (oral hypoglycemic drug used to treat type 2 diabetes mellitus ) prescriptions and if blood glucose or HBA1c lab test  was ordered before the prescription of this drug. We found 771 patients who had metformin prescriptions during their ambulatory visit without any order for blood sugar or HBA1c lab test. We checked if patients in this cohort if they had DM diagnosis and none of them have DM.
+1.	To check for quality of care for patients who have encounters for ambulatory visit in PCORnet database, we used metformin (oral hypoglycemic drug used to treat type 2 diabetes mellitus ) prescriptions and if blood glucose or HBA1c lab test  was ordered before the prescription of this drug. We found 771 patients who had metformin prescriptions during their ambulatory visit without any order for blood sugar or HBA1c lab test. 
 
 *Check for number of patients had metformin prescription who have ambulatory visit*
 ```SQL

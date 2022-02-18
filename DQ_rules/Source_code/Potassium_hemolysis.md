@@ -64,7 +64,7 @@ AND (l.raw_result LIKE 'HEMOLYZED%' OR l.raw_result LIKE 'hem%' )
 GROUP BY e.enc_type, resultyear
 ORDER BY e.enc_type, resultyear DESC;
  ```
-*Encounter with hemolyzed potassium results over 10 years*
+*Encounters with hemolyzed potassium results over 10 years*
 ```SQL
  SELECT COUNT (DISTINCT e.encounterid),
                e.enc_type, 

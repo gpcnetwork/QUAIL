@@ -19,7 +19,7 @@ FROM PCORNET_CDM.CDM_C010R022.ENCOUNTER pe
 LEFT JOIN PCORNET_CDM.CDM_C010R022.PRESCRIBING pp ON pp.encounterid = pe.encounterid
 WHERE pe.ENC_TYPE= 'IP' 
 AND pp.RAW_RX_MED_NAME LIKE 'gentamicin%' 
-AND pe.ADMIT_DATE BETWEEN '2020-1-1' AND '2020-2-1' AND pp.encounterid =7373738 
+AND pe.ADMIT_DATE BETWEEN '2020-1-1' AND '2020-2-1' AND pp.encounterid =******* 
 ORDER BY  pp.RX_ORDER_DATE, pp.RX_ORDER_Time, pp.Rx_start_date;
 
 ```

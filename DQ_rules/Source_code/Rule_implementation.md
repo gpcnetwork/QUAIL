@@ -127,7 +127,7 @@ WHERE l.result_num < v.valid_low OR l.result_num > valid_high OR l.result_unit <
 ```
 
 2. **Rules to assess relational integrity and attribute dependency**   
-We used age and diagnosis, age and procedure, gender and diagnosis, gender and procedure, drug and diagnosis, inpatient-only procedures, diagnosis and lab, drug and lab, drug and continuous procedure, and lab and continuous lab to assess relational integrity and attribute dependency domains.     
+We used age and diagnosis, age and procedure, gender and diagnosis, gender and procedure, gender and clinical specialty, drug and diagnosis, inpatient-only procedures, diagnosis and lab, drug and lab, drug and continuous procedure, and drug monitoring to assess relational integrity and attribute dependency domains.     
 
   - **Age and diagnosis**  
 Implementing this rule shows 5,411 patients have discrepancies out of 1,036,512 and have recorded diagnoses in the diagnosis table not compatible with their age.
@@ -522,7 +522,7 @@ AND DATEDIFF(MONTH,d.rx_start_date,p.px_date  )>=0
 AND DATEDIFF(MONTH,d.rx_start_date,p.px_date  )<=24;
 
 ```
-- **Drug Monitring**  
+- **Drug Monitoring**  
 Implementing this rule shows 32,465 patients have discrepancies out of 62,947 patients. We flag any patient who has prescribed the drug but not the lab test to monitor the drug level. 
 
 *Number of whole of patients*

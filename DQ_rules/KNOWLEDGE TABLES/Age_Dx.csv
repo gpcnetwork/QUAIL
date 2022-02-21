@@ -1,0 +1,131 @@
+ICD9 Code,Alternate Code,ICD10 Code,Valid Beginning Age,Valid End Age,Applicability
+7703,770.3,P26.1,0,0,is only applicable to newborns of age 0 years
+7703,770.3,P26.8,0,0,is only applicable to newborns of age 0 years
+7703,770.3,P26.0,0,0,is only applicable to newborns of age 0 years
+7703,770.3,P26.9,0,0,is only applicable to newborns of age 0 years
+7980,798.0,R99,0,17,is only applicable to pediatric patients aged 0 - 17 years inclusive
+27701,277.01,E84.11,0,0,is only applicable to newborns of age 0 years
+37555,375.55,H04.539,0,0,is only applicable to newborns of age 0 years
+37555,375.55,H04.531,0,0,is only applicable to newborns of age 0 years
+37555,375.55,H04.532,0,0,is only applicable to newborns of age 0 years
+37555,375.55,H04.533,0,0,is only applicable to newborns of age 0 years
+65950,659.50,O09.519,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive
+65951,659.51,O09.511,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive
+65951,659.51,O09.512,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive
+65951,659.51,O09.513,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive
+65953,659.53,O09.511,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive
+65953,659.53,O09.512,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive
+65953,659.53,O09.513,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive
+65960,659.60,O09.529,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive
+65961,659.61,O09.521,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive
+65961,659.61,O09.522,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive
+65961,659.61,O09.523,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive
+65963,659.63,O09.521,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive
+65963,659.63,O09.522,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive
+65963,659.63,O09.523,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive
+77931,779.31,P92.1,0,0,is only applicable to newborns of age 0 years
+77931,779.31,P92.2,0,0,is only applicable to newborns of age 0 years
+77931,779.31,P92.8,0,0,is only applicable to newborns of age 0 years
+77931,779.31,P92.9,0,0,is only applicable to newborns of age 0 years
+77931,779.31,P92.3,0,0,is only applicable to newborns of age 0 years
+77931,779.31,P92.4,0,0,is only applicable to newborns of age 0 years
+77931,779.31,P92.5,0,0,is only applicable to newborns of age 0 years
+77932,779.32,P92.01,0,0,is only applicable to newborns of age 0 years
+77933,779.33,P92.09,0,0,is only applicable to newborns of age 0 years
+77934,779.34,P92.6,0,0,is only applicable to newborns of age 0 years
+78091,780.91,R68.12,0,0,is only applicable to newborns of age 0 years
+78092,780.92,R68.11,0,0,is only applicable to newborns of age 0 years
+V2031,V20.31,Z00.110,0,0,is only applicable to newborns of age 0 years
+V2032,V20.32,Z00.111,0,0,is only applicable to newborns of age 0 years
+V2381,V23.81,O09.511,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive.
+V2381,V23.81,O09.512,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive.
+V2381,V23.81,O09.513,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive.
+V2381,V23.81,O09.519,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive.
+V2382,V23.82,O09.521,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive.
+V2382,V23.82,O09.522,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive.
+V2382,V23.82,O09.523,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive.
+V2382,V23.82,O09.529,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive.
+V2383,V23.83,O09.611,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive.
+V2383,V23.83,O09.612,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive.
+V2383,V23.83,O09.613,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive.
+V2383,V23.83,O09.619,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive.
+V2384,V23.84,O09.621,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive.
+V2384,V23.84,O09.622,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive.
+V2384,V23.84,O09.623,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive.
+V2384,V23.84,O09.629,12,55,is only applicable to maternity patients aged 12 - 55 years inclusive.
+V290,V29.0,P00.2,0,0,is only applicable to newborns of age 0 years
+V291,V29.1,P00.89,0,0,is only applicable to newborns of age 0 years
+V292,V29.2,P00.3,0,0,is only applicable to newborns of age 0 years
+V293,V29.3,P00.89,0,0,is only applicable to newborns of age 0 years
+V298,V29.8,P00.89,0,0,is only applicable to newborns of age 0 years
+V299,V29.9,P00.9,0,0,is only applicable to newborns of age 0 years
+V3000,V30.00,Z38.00,0,0,is only applicable to newborns of age 0 years
+V3000,V30.00,Z38.2,0,0,is only applicable to newborns of age 0 years
+V3001,V30.01,Z38.01,0,0,is only applicable to newborns of age 0 years
+V301,V30.1,Z38.1,0,0,is only applicable to newborns of age 0 years
+V302,V30.2,Z38.1,0,0,is only applicable to newborns of age 0 years
+V3100,V31.00,Z38.30,0,0,is only applicable to newborns of age 0 years
+V3100,V31.00,Z38.5,0,0,is only applicable to newborns of age 0 years
+V3101,V31.01,Z38.31,0,0,is only applicable to newborns of age 0 years
+V311,V31.1,Z38.4,0,0,is only applicable to newborns of age 0 years
+V312,V31.2,Z38.4,0,0,is only applicable to newborns of age 0 years
+V3200,V32.00,Z38.30,0,0,is only applicable to newborns of age 0 years
+V3201,V32.01,Z38.31,0,0,is only applicable to newborns of age 0 years
+V321,V32.1,Z38.4,0,0,is only applicable to newborns of age 0 years
+V322,V32.2,Z38.4,0,0,is only applicable to newborns of age 0 years
+V3300,V33.00,Z38.30,0,0,is only applicable to newborns of age 0 years
+V3301,V33.01,Z38.31,0,0,is only applicable to newborns of age 0 years
+V331,V33.1,Z38.4,0,0,is only applicable to newborns of age 0 years
+V332,V33.2,Z38.4,0,0,is only applicable to newborns of age 0 years
+V3400,V34.00,Z38.61,0,0,is only applicable to newborns of age 0 years
+V3400,V34.00,Z38.63,0,0,is only applicable to newborns of age 0 years
+V3400,V34.00,Z38.65,0,0,is only applicable to newborns of age 0 years
+V3400,V34.00,Z38.68,0,0,is only applicable to newborns of age 0 years
+V3400,V34.00,Z38.8,0,0,is only applicable to newborns of age 0 years
+V3401,V34.01,Z38.69,0,0,is only applicable to newborns of age 0 years
+V3401,V34.01,Z38.62,0,0,is only applicable to newborns of age 0 years
+V3401,V34.01,Z38.64,0,0,is only applicable to newborns of age 0 years
+V3401,V34.01,Z38.66,0,0,is only applicable to newborns of age 0 years
+V341,V34.1,Z38.7,0,0,is only applicable to newborns of age 0 years
+V342,V34.2,Z38.7,0,0,is only applicable to newborns of age 0 years
+V3500,V35.00,Z38.68,0,0,is only applicable to newborns of age 0 years
+V3500,V35.00,Z38.61,0,0,is only applicable to newborns of age 0 years
+V3500,V35.00,Z38.63,0,0,is only applicable to newborns of age 0 years
+V3500,V35.00,Z38.65,0,0,is only applicable to newborns of age 0 years
+V3500,V35.00,Z38.8,0,0,is only applicable to newborns of age 0 years
+V3501,V35.01,Z38.69,0,0,is only applicable to newborns of age 0 years
+V3501,V35.01,Z38.62,0,0,is only applicable to newborns of age 0 years
+V3501,V35.01,Z38.64,0,0,is only applicable to newborns of age 0 years
+V3501,V35.01,Z38.66,0,0,is only applicable to newborns of age 0 years
+V3501,V35.01,Z38.8,0,0,is only applicable to newborns of age 0 years
+V351,V35.1,Z38.7,0,0,is only applicable to newborns of age 0 years
+V352,V35.2,Z38.7,0,0,is only applicable to newborns of age 0 years
+V3600,V36.00,Z38.68,0,0,is only applicable to newborns of age 0 years
+V3600,V36.00,Z38.61,0,0,is only applicable to newborns of age 0 years
+V3600,V36.00,Z38.63,0,0,is only applicable to newborns of age 0 years
+V3600,V36.00,Z38.65,0,0,is only applicable to newborns of age 0 years
+V3600,V36.00,Z38.8,0,0,is only applicable to newborns of age 0 years
+V3601,V36.01,Z38.69,0,0,is only applicable to newborns of age 0 years
+V3601,V36.01,Z38.62,0,0,is only applicable to newborns of age 0 years
+V3601,V36.01,Z38.64,0,0,is only applicable to newborns of age 0 years
+V3601,V36.01,Z38.66,0,0,is only applicable to newborns of age 0 years
+V3601,V36.01,Z38.8,0,0,is only applicable to newborns of age 0 years
+V361,V36.1,Z38.7,0,0,is only applicable to newborns of age 0 years
+V362,V36.2,Z38.7,0,0,is only applicable to newborns of age 0 years
+V3700,V37.00,Z38.68,0,0,is only applicable to newborns of age 0 years
+V3700,V37.00,Z38.61,0,0,is only applicable to newborns of age 0 years
+V3700,V37.00,Z38.63,0,0,is only applicable to newborns of age 0 years
+V3700,V37.00,Z38.65,0,0,is only applicable to newborns of age 0 years
+V3700,V37.00,Z38.8,0,0,is only applicable to newborns of age 0 years
+V3701,V37.01,Z38.69,0,0,is only applicable to newborns of age 0 years
+V3701,V37.01,Z38.62,0,0,is only applicable to newborns of age 0 years
+V3701,V37.01,Z38.64,0,0,is only applicable to newborns of age 0 years
+V3701,V37.01,Z38.66,0,0,is only applicable to newborns of age 0 years
+V3701,V37.01,Z38.8,0,0,is only applicable to newborns of age 0 years
+V371,V37.1,Z38.7,0,0,is only applicable to newborns of age 0 years
+V372,V37.2,Z38.7,0,0,is only applicable to newborns of age 0 years
+V3900,V39.00,Z38.00,0,0,is only applicable to newborns of age 0 years
+V3900,V39.00,V38.2,0,0,is only applicable to newborns of age 0 years
+V3901,V39.01,Z38.01,0,0,is only applicable to newborns of age 0 years
+V391,V39.1,Z38.1,0,0,is only applicable to newborns of age 0 years
+V392,V39.2,Z38.1,0,0,is only applicable to newborns of age 0 years

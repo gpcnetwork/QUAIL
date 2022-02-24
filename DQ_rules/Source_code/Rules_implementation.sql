@@ -468,7 +468,7 @@ WHERE d.raw_rxnorm_cui IN ('202462','5521') AND p.patid IN (SELECT p.patid
 
 ---Number of records with discrepancies
 
-SELECT COUNT (DISTINCT p.patid) 
+SELECT *
 FROM PCORNET_CDM.CDM_C010R022.PRIVATE_PRESCRIBING d
 LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_PROCEDURES p ON p.patid = d.patid
 WHERE d.raw_rxnorm_cui IN ('202462','5521') AND p.patid NOT IN (SELECT p.patid 

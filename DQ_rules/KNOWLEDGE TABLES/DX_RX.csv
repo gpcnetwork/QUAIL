@@ -1,0 +1,4 @@
+DRUG,StatusR,DIAGNOSIS,StatusD
+Aspirin,Absent,IHD,Present
+NSAID drugs,Present,Peptic ulcer,Present
+NSAID drugs,Present,Duodenal ulcer,Present

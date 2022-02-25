@@ -536,6 +536,80 @@ AND l.patid NOT IN (SELECT l.patid
                     WHERE l.lab_loinc IN ('10535-3','14334-7','25168-6','3968-5','1811288','29247-4','11253-2','20578-1','4092-3','3948-7','4086-5','3432-2','1558044','3663-2','3665-7','4057-6','4059-2','4058-4','35669-1',
                     '4049-3','3422-3','23905-3','14836-1'));
 
+/*Drug Interaction*/
+ 
+
+---The number of whole cohort
+
+select count (distinct Patid) from PCORNET_CDM.CDM_C010R022.PRIVATE_PRESCRIBING;
+
+---The number of records with discrepancies
+
+SELECT  DISTINCT a.patid ,
+                 a.rx_order_date,
+                 a.encounterid,
+                 a.raw_rxnorm_cui,
+                 a.raw_rx_med_name,
+                 a.drug_name_1,
+                 a.rxnormm_1,
+                 b.raw_rxnorm_cui,
+                 b.raw_rx_med_name,
+                 b.drug_name_2,
+                 b.rxnorm_2
+FROM interaction_a AS a,interaction_b AS b  
+WHERE b.encounterid = a.encounterid AND b.patid = a.patid
+AND a.rx_order_date = b.rx_order_date AND ((a.raw_rxnorm_cui='74169' AND b.raw_rxnorm_cui='34482' )
+OR (a.raw_rxnorm_cui='4493' AND b.raw_rxnorm_cui='8123' )
+OR (a.raw_rxnorm_cui='3407' AND b.raw_rxnorm_cui='9068' )
+OR (a.raw_rxnorm_cui='136411' AND b.raw_rxnorm_cui='28004' )
+OR (a.raw_rxnorm_cui='8591' AND b.raw_rxnorm_cui='9997' )
+OR (a.raw_rxnorm_cui='2599' AND b.raw_rxnorm_cui='8787' )
+OR (a.raw_rxnorm_cui='11289' AND b.raw_rxnorm_cui='3393' )
+OR (a.raw_rxnorm_cui='10438' AND b.raw_rxnorm_cui='2551' )
+OR (a.raw_rxnorm_cui='8331' AND b.raw_rxnorm_cui='6135' )
+OR (a.raw_rxnorm_cui='6851' AND b.raw_rxnorm_cui='8698' )
+OR (a.raw_rxnorm_cui='1760' AND b.raw_rxnorm_cui='8896' )
+OR (LOWER(a.raw_rx_med_name)='piperacillin_taz' AND LOWER(b.raw_rx_med_name)='imipenem-cilastatin' )
+OR (LOWER(a.raw_rx_med_name)='fluoxetine' AND LOWER(b.raw_rx_med_name)='phenelize' )
+OR (LOWER(a.raw_rx_med_name)='digoxin' AND LOWER(b.raw_rx_med_name)='quinidine' )
+OR (LOWER(a.raw_rx_med_name)='sildenafil' AND LOWER(b.raw_rx_med_name)='isosorbide_mononitrate' )
+OR (LOWER(a.raw_rx_med_name)='potassium Chloride' AND LOWER(b.raw_rx_med_name)='spironolactone' )
+OR (LOWER(a.raw_rx_med_name)='clonidine' AND LOWER(b.raw_rx_med_name)='propranolol' )
+OR (LOWER(a.raw_rx_med_name)='warfarin' AND LOWER(b.raw_rx_med_name)='diflunisal' )
+OR (LOWER(a.raw_rx_med_name)='theophylline' AND LOWER(b.raw_rx_med_name)='ciprofloxacin' )
+OR (LOWER(a.raw_rx_med_name)='pimozide' AND LOWER(b.raw_rx_med_name)='ketoconazole' )
+OR (LOWER(a.raw_rx_med_name)='methotrexate' AND LOWER(b.raw_rx_med_name)='probenecid' )
+OR (LOWER(a.raw_rx_med_name)='bromocriptine ' AND LOWER(b.raw_rx_med_name)='pseudoephedrine' ))
+ORDER BY patid,encounterid,rx_order_date;
+
+---Number of patients with discrepancies
+
+SELECT   COUNT(DISTINCT a.patid)
+FROM interaction_a AS a,interaction_b AS b  
+WHERE b.encounterid = a.encounterid AND b.patid = a.patid
+AND a.rx_order_date = b.rx_order_date AND ((a.raw_rxnorm_cui='74169' AND b.raw_rxnorm_cui='34482' )
+OR (a.raw_rxnorm_cui='4493' AND b.raw_rxnorm_cui='8123' )
+OR (a.raw_rxnorm_cui='3407' AND b.raw_rxnorm_cui='9068' )
+OR (a.raw_rxnorm_cui='136411' AND b.raw_rxnorm_cui='28004' )
+OR (a.raw_rxnorm_cui='8591' AND b.raw_rxnorm_cui='9997' )
+OR (a.raw_rxnorm_cui='2599' AND b.raw_rxnorm_cui='8787' )
+OR (a.raw_rxnorm_cui='11289' AND b.raw_rxnorm_cui='3393' )
+OR (a.raw_rxnorm_cui='10438' AND b.raw_rxnorm_cui='2551' )
+OR (a.raw_rxnorm_cui='8331' AND b.raw_rxnorm_cui='6135' )
+OR (a.raw_rxnorm_cui='6851' AND b.raw_rxnorm_cui='8698' )
+OR (a.raw_rxnorm_cui='1760' AND b.raw_rxnorm_cui='8896' )
+OR (LOWER(a.raw_rx_med_name)='piperacillin_taz' AND LOWER(b.raw_rx_med_name)='imipenem-cilastatin' )
+OR (LOWER(a.raw_rx_med_name)='fluoxetine' AND LOWER(b.raw_rx_med_name)='phenelize' )
+OR (LOWER(a.raw_rx_med_name)='digoxin' AND LOWER(b.raw_rx_med_name)='quinidine' )
+OR (LOWER(a.raw_rx_med_name)='sildenafil' AND LOWER(b.raw_rx_med_name)='isosorbide_mononitrate' )
+OR (LOWER(a.raw_rx_med_name)='potassium Chloride' AND LOWER(b.raw_rx_med_name)='spironolactone' )
+OR (LOWER(a.raw_rx_med_name)='clonidine' AND LOWER(b.raw_rx_med_name)='propranolol' )
+OR (LOWER(a.raw_rx_med_name)='warfarin' AND LOWER(b.raw_rx_med_name)='diflunisal' )
+OR (LOWER(a.raw_rx_med_name)='theophylline' AND LOWER(b.raw_rx_med_name)='ciprofloxacin' )
+OR (LOWER(a.raw_rx_med_name)='pimozide' AND LOWER(b.raw_rx_med_name)='ketoconazole' )
+OR (LOWER(a.raw_rx_med_name)='methotrexate' AND LOWER(b.raw_rx_med_name)='probenecid' )
+OR (LOWER(a.raw_rx_med_name)='bromocriptine ' AND LOWER(b.raw_rx_med_name)='pseudoephedrine' ))
+;
 
 
 /**Rules to assess historical data and state-dependent objects**/   

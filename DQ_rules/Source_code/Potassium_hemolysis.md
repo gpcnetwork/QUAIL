@@ -51,7 +51,7 @@ AND l.result_num IS Null
 AND (raw_result LIKE 'HEMOLYZED%' OR raw_result LIKE 'hem%' ) 
 AND e.enc_type IN ('ED');
  ```
- 4.	Then we checked for the annual trend for the prevalence of hemolyzed samples and we found the number of encounters that have hemolyzed results in the emergency room increasing significantly. For example, the number of encounters that have hemolyzed results in 2010 was (363) which increased to (1,867). The same trend seen with encounters have potassium tests with hemolyzed results in 2010 (231) raised to (772) in 2020.
+ 4.	Then we checked for the annual trend for the prevalence of hemolyzed samples and we found the number of encounters that have hemolyzed results in the emergency room increasing significantly. For example, the number of encounters that have hemolyzed results in 2010 was (363) which increased to (1,867) in 2020. The same trend seen with encounters have potassium tests with hemolyzed results in 2010 (231) raised to (772) in 2020.
 
  *Encounters with hemolyzed results over 10 years*
  ```SQL

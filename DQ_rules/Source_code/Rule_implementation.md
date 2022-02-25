@@ -283,7 +283,7 @@ AND d.sex = b.invalid_gender
 ;
 ```
 - **Gender and clinical specialty**  
-Implementing this rule shows 26,106 patients have discrepancies out of 65,780 patients. We flagged any patient who is male and his age more than one year and got service in obstetric or gynecology outpatient clinic or department.
+Implementing this rule shows 26,106 patients have discrepancies out of 142,054 patients. We flagged any patient who is male and his age more than one year and got service in obstetric or gynecology outpatient clinic or department.
 
 *Number of whole patients*
 ```SQL

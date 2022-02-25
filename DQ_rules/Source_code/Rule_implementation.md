@@ -322,7 +322,7 @@ FROM (SELECT  DATEDIFF(YY, d.birth_date, GETDATE())    AS age,
 
 
 - **Drug and diagnosis**  
-We used the NSAIDs and peptic ulcer disease as case studies to implement this rule. Implementing this rule shows 31 out of 1057 patients have discrepancies. These patients were prescribed NSAIDs on the date of peptic ulcer disease diagnosis.
+We used the NSAIDs and peptic ulcer disease as case study to implement this rule. Implementing this rule shows 31 out of 1057 patients have discrepancies. These patients were prescribed NSAIDs on the date of peptic ulcer disease diagnosis.
 
 *Number of whole patients*
 ```SQL

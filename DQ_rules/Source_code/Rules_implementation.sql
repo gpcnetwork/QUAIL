@@ -175,7 +175,7 @@ SELECT  DISTINCT  d.PATID,
 FROM PCORNET_CDM.CDM_C010R021.DEMOGRAPHIC AS d
 LEFT JOIN  PCORNET_CDM.CDM_C010R022.PRIVATE_PROCEDURES AS pr ON d.PATID = pr.PATID
 LEFT JOIN  ANALYTICSDB.QARULES.AGE_PX b ON (b.cpt_code = pr.px )
-WHERE px_type = 'CH'
+WHERE px_type = 'CH' and pcor_age < b.valid_begin_age OR  pcor_age > b.valid_end_age;
 
 ---Count of patients with discrepancies
 

@@ -198,7 +198,7 @@ FROM PCORNET_CDM.CDM_C010R022.PRIVATE_DEMOGRAPHIC d
 LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS dx ON d.patid = dx.patid
 LEFT JOIN ANALYTICSDB.QARULES.GENDER_DX b ON (b.icd9code = dx.dx OR b.icd10code = dx.dx)
 WHERE dx.dx_type IN ('09','10') 
-AND (dx.DX_DATE > '01-JAN-2020' OR dx.ADMIT_DATE > '01-JAN-2020')
+AND (dx.DX_DATE > '01-JAN-2015' OR dx.ADMIT_DATE > '01-JAN-2015')
 ;
 
 ---Number of records that have discrepancy
@@ -219,7 +219,7 @@ FROM PCORNET_CDM.CDM_C010R022.PRIVATE_DEMOGRAPHIC d
 LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS dx ON d.patid = dx.patid
 LEFT JOIN ANALYTICSDB.QARULES.GENDER_DX b ON (b.icd9code = dx.dx OR b.icd10code = dx.dx)
 WHERE dx.dx_type IN ('09','10') 
-AND (dx.DX_DATE > '01-JAN-2020' OR dx.ADMIT_DATE > '01-JAN-2020')
+AND (dx.DX_DATE > '01-JAN-2015' OR dx.ADMIT_DATE > '01-JAN-2015')
 AND d.sex = b.invalid_gender;
 
 ---Number of patients with discrepancies
@@ -229,7 +229,7 @@ FROM PCORNET_CDM.CDM_C010R022.PRIVATE_DEMOGRAPHIC d
 LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS dx ON d.patid = dx.patid
 LEFT JOIN ANALYTICSDB.QARULES.GENDER_DX b ON (b.icd9code = dx.dx OR b.icd10code = dx.dx)
 WHERE dx.dx_type IN ('09','10') 
-AND (dx.DX_DATE > '01-JAN-2020' OR dx.ADMIT_DATE > '01-JAN-2020')
+AND (dx.DX_DATE > '01-JAN-2015' OR dx.ADMIT_DATE > '01-JAN-2015')
 AND d.sex = b.invalid_gender;
 
 /*Gender and procedure*/  

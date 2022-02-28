@@ -313,14 +313,11 @@ FROM (SELECT  DATEDIFF(YY, d.birth_date, GETDATE())    AS age,
 
 ---Number of whole patients
 
-SELECT COUNT (DISTINCT patid) AS countp
-FROM (SELECT  DATEDIFF(YY, d.birth_date, diagnosis.dx_date) as pcor_age, 
-            d.patid
-FROM PCORNET_CDM.CDM_C010R021.DEMOGRAPHIC AS d
-LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS AS diagnosis ON d.PATID = diagnosis.PATID
-LEFT JOIN ANALYTICSDB.QARULES.AGE_DX b ON (b.icd9code = diagnosis.dx or b.Alternate_Code = diagnosis.dx  OR b.icd10code = diagnosis.dx)
-WHERE dx_type IN ('09', '10')  
- );
+SELECT COUNT (DISTINCT d.patid)
+FROM PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS d
+LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_PRESCRIBING p ON d.patid = p.patid
+WHERE  (d.dx LIKE '%K26%' OR d.dx LIKE '%K27.9%')  
+AND  p.raw_rxnorm_cui IN ('5640','1911','142442');
 
 ---The number of records with discrepancies
 

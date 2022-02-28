@@ -328,7 +328,7 @@ We used the NSAIDs and peptic ulcer disease as case study to implement this rule
 SELECT COUNT (DISTINCT d.patid)
 FROM PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS d
 LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_PRESCRIBING p ON d.patid = p.patid
-WHERE  (d.dx like '%K26%' or d.dx like '%K27.9%')  
+WHERE  (d.dx LIKE '%K26%' OR d.dx LIKE '%K27.9%')  
 AND  p.raw_rxnorm_cui IN ('5640','1911','142442');
 ```
 *The number of records with discrepancies*
@@ -347,7 +347,7 @@ SELECT  d.patid,
 FROM PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS d
 LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_PRESCRIBING p ON d.patid = p.patid
 WHERE d.dx_date = p.rx_start_date 
-AND (d.dx like '%K26%' or d.dx like '%K27.9%') 
+AND (d.dx LIKE '%K26%' OR d.dx LIKE '%K27.9%') 
 AND  p.raw_rxnorm_cui IN ('5640','1911','142442');
 ```
 *Number of patients with discrepancies*
@@ -356,7 +356,7 @@ SELECT COUNT (DISTINCT d.patid)
 FROM PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS d
 LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_PRESCRIBING p ON d.patid = p.patid
 WHERE  d.dx_date = p.rx_start_date 
-AND (d.dx like '%K26%' or d.dx like '%K27.9%')  
+AND (d.dx LIKE '%K26%' OR d.dx LIKE '%K27.9%')  
 AND  p.raw_rxnorm_cui IN ('5640','1911','142442');
 
 ```

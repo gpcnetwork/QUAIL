@@ -283,7 +283,7 @@ AND d.sex = b.invalid_gender
 ;
 ```
 - **Gender and clinical specialty**  
-Implementing this rule shows 26,106 patients have discrepancies out of 142,054 patients. We flagged any patient who is male and his age more than one year and got service in obstetric or gynecology outpatient clinic or department.
+Implementing this rule shows 26,106 patients have discrepancies out of 1,129,798 patients. We flagged any patient who is male and his age more than one year and got service in obstetric or gynecology outpatient clinic or department.
 
 *Number of whole patients*
 ```SQL
@@ -292,8 +292,7 @@ FROM (SELECT  DATEDIFF(YY, d.birth_date, GETDATE())   AS age  ,
    e.patid 
      FROM  PCORNET_CDM.CDM_C010R022.PRIVATE_ENCOUNTER e
      LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_DEMOGRAPHIC d ON  d.patid= e.patid
-     WHERE  age > 1 AND e.facility_type IN ('HOSPITAL_OUTPATIENT_OBGYN_CLINIC','HOSPITAL_OUTPATIENT_GYNECOLOGY_CLINIC', 'HOSPITAL_OUTPATIENT_OBSTETRICAL_CLINIC')
-);
+     WHERE  age > 1 );
 ```
 *Number of records with discrepancies*
 ```SQL

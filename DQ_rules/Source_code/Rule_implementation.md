@@ -201,7 +201,7 @@ WHERE px_type = 'CH' and pcor_age < b.valid_begin_age OR  pcor_age > b.valid_end
 );
 ```
 - **Gender and diagnosis**  
-Implementing this rule shows 14,478 patients out of 321,264 patients have discrepancies and have diagnoses recorded in the diagnosis table not compatible with the gender of the patient.
+Implementing this rule shows 48,050 patients out of 597,437 patients have discrepancies and have diagnoses recorded in the diagnosis table not compatible with the gender of the patient.
 
 *The number of whole cohort of patients admitted after Jan/01*
 ```SQL
@@ -210,7 +210,7 @@ FROM PCORNET_CDM.CDM_C010R022.PRIVATE_DEMOGRAPHIC d
 LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS dx ON d.patid = dx.patid
 LEFT JOIN ANALYTICSDB.QARULES.GENDER_DX b ON (b.icd9code = dx.dx OR b.icd10code = dx.dx)
 WHERE dx.dx_type IN ('09','10') 
-AND (dx.DX_DATE > '01-JAN-2020' OR dx.ADMIT_DATE > '01-JAN-2020')
+AND (dx.DX_DATE > '01-JAN-2015' OR dx.ADMIT_DATE > '01-JAN-2015')
 ;
 ```
 *Number of records that have discrepancy*
@@ -231,7 +231,7 @@ FROM PCORNET_CDM.CDM_C010R022.PRIVATE_DEMOGRAPHIC d
 LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS dx ON d.patid = dx.patid
 LEFT JOIN ANALYTICSDB.QARULES.GENDER_DX b ON (b.icd9code = dx.dx OR b.icd10code = dx.dx)
 WHERE dx.dx_type IN ('09','10') 
-AND (dx.DX_DATE > '01-JAN-2020' OR dx.ADMIT_DATE > '01-JAN-2020')
+AND (dx.DX_DATE > '01-JAN-2015' OR dx.ADMIT_DATE > '01-JAN-2015')
 AND d.sex = b.invalid_gender;
 ```
 *Number of patients with discrepancies*
@@ -241,7 +241,7 @@ FROM PCORNET_CDM.CDM_C010R022.PRIVATE_DEMOGRAPHIC d
 LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS dx ON d.patid = dx.patid
 LEFT JOIN ANALYTICSDB.QARULES.GENDER_DX b ON (b.icd9code = dx.dx OR b.icd10code = dx.dx)
 WHERE dx.dx_type IN ('09','10') 
-AND (dx.DX_DATE > '01-JAN-2020' OR dx.ADMIT_DATE > '01-JAN-2020')
+AND (dx.DX_DATE > '01-JAN-2015' OR dx.ADMIT_DATE > '01-JAN-2015')
 AND d.sex = b.invalid_gender;
 ```
 - **Gender and procedure**  

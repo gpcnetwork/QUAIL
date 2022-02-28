@@ -325,48 +325,40 @@ We used the NSAIDs and peptic ulcer disease as case study to implement this rule
 
 *Number of whole patients*
 ```SQL
-SELECT COUNT (DISTINCT patid) AS countp
-FROM (SELECT  DATEDIFF(YY, d.birth_date, diagnosis.dx_date) as pcor_age, 
-            d.patid
-FROM PCORNET_CDM.CDM_C010R021.DEMOGRAPHIC AS d
-LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS AS diagnosis ON d.PATID = diagnosis.PATID
-LEFT JOIN ANALYTICSDB.QARULES.AGE_DX b ON (b.icd9code = diagnosis.dx or b.Alternate_Code = diagnosis.dx  OR b.icd10code = diagnosis.dx)
-WHERE dx_type IN ('09', '10')  
- );
+SELECT COUNT (DISTINCT d.patid)
+FROM PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS d
+LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_PRESCRIBING p ON d.patid = p.patid
+WHERE  (d.dx like '%K26%' or d.dx like '%K27.9%')  
+AND  p.raw_rxnorm_cui IN ('5640','1911','142442');
 ```
 *The number of records with discrepancies*
 ```SQL
-SELECT  DISTINCT  d.PATID, 
-                  d.BIRTH_DATE, 
-                  dATEDIFF(YY, d.birth_date, diagnosis.dx_date) as pcor_age,
-                  b.Valid_Beginning_Age,
-                  b.Valid_End_Age, 
-                  d.SEX, 
-                  diagnosis.raw_diagnosis_name, diagnosis.dx_date,
-                  diagnosis.ADMIT_DATE, 
-                  diagnosis.ENCOUNTERID, 
-                  diagnosis.DX as dx, 
-                  diagnosis.ADMIT_DATE,
-                  b.icd9code,
-                  b.icd10code,
-                  b.Alternate_Code 
-FROM PCORNET_CDM.CDM_C010R021.DEMOGRAPHIC AS d
-LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS AS diagnosis ON d.PATID = diagnosis.PATID
-LEFT JOIN ANALYTICSDB.QARULES.AGE_DX b ON (b.icd9code = diagnosis.dx OR b.Alternate_Code = diagnosis.dx  OR b.icd10code = diagnosis.dx)
-WHERE dx_type IN ('09', '10') 
-AND pcor_age< b.valid_beginning_age OR pcor_age>b.valid_end_age
-;
+SELECT  d.patid,
+        d.dx, 
+        d.dx_type,
+        d.dx_date, 
+        d.admit_date, 
+        d.raw_diagnosis_name, 
+        p.rxnorm_cui, 
+        p.raw_rx_med_name,
+        p.raw_rxnorm_cui, 
+        p.rx_start_date,
+        p.rx_end_date
+FROM PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS d
+LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_PRESCRIBING p ON d.patid = p.patid
+WHERE d.dx_date = p.rx_start_date 
+AND (d.dx like '%K26%' or d.dx like '%K27.9%') 
+AND  p.raw_rxnorm_cui IN ('5640','1911','142442');
 ```
 *Number of patients with discrepancies*
 ```SQL
-SELECT COUNT (DISTINCT patid ) AS coutpd 
-FROM (SELECT  DATEDIFF(YY, d.birth_date, diagnosis.dx_date) as pcor_age, 
-            d.patid
-FROM PCORNET_CDM.CDM_C010R021.DEMOGRAPHIC AS d
-LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS AS diagnosis ON d.PATID = diagnosis.PATID
-LEFT JOIN ANALYTICSDB.QARULES.AGE_DX b ON (b.icd9code = diagnosis.dx OR b.Alternate_Code = diagnosis.dx  OR b.icd10code = diagnosis.dx)
-WHERE dx_type IN ('09', '10') AND pcor_age< b.valid_beginning_age OR pcor_age>b.valid_end_age
-);
+SELECT COUNT (DISTINCT d.patid)
+FROM PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS d
+LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_PRESCRIBING p ON d.patid = p.patid
+WHERE  d.dx_date = p.rx_start_date 
+AND (d.dx like '%K26%' or d.dx like '%K27.9%')  
+AND  p.raw_rxnorm_cui IN ('5640','1911','142442');
+
 ```
 - **Inpatient only procedure**
 We include IP and EI as encounter types to capture procedures for some patients who were in the emergency room and admitted to the hospital. Implementing this rule captured 12,406 patients who have discrepancies out of 913,712 patients. These procedures should be done in the hospital according to the rule.

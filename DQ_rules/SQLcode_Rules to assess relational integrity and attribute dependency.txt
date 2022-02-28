@@ -120,34 +120,27 @@ and d.sex = b.invalid_gender
 
 5. Drug and diagnosis 
 
-//*Number of whole patients *//----1,036,512
- SELECT count (distinct patid) AS countp
-FROM (select  datediff(YY, d.birth_date, diagnosis.dx_date) as pcor_age, d.patid
-from "PCORNET_CDM"."CDM_C010R021"."DEMOGRAPHIC" as d
-LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS as diagnosis ON d.PATID = diagnosis.PATID
-LEFT JOIN ANALYTICSDB.QARULES.AGE_DX b ON (b.icd9code = diagnosis.dx or b.Alternate_Code = diagnosis.dx  or b.icd10code = diagnosis.dx)
-where dx_type in ('09', '10')  
- );
+//*Number of whole patients *//----1057
+ select count (distinct d.patid)
+from PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS d---
 
-//*The number of records with discrepancies*//---11,230
-select  distinct  d.PATID, d.BIRTH_DATE, datediff(YY, d.birth_date, diagnosis.dx_date) as pcor_age,b.Valid_Beginning_Age,b.Valid_End_Age, d.SEX 
-, diagnosis.ENCOUNTERID, diagnosis.DX, diagnosis.raw_diagnosis_name, diagnosis.dx_date
-, diagnosis.ADMIT_DATE,diagnosis.ENCOUNTERID, diagnosis.DX as dx, diagnosis.ADMIT_DATE,b.icd9code,b.icd10code,b.Alternate_Code 
-from "PCORNET_CDM"."CDM_C010R021"."DEMOGRAPHIC" as d
-LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS as diagnosis ON d.PATID = diagnosis.PATID
-LEFT JOIN ANALYTICSDB.QARULES.AGE_DX b ON (b.icd9code = diagnosis.dx or b.Alternate_Code = diagnosis.dx  or b.icd10code = diagnosis.dx)
-where dx_type in ('09', '10') 
-and pcor_age< b.valid_beginning_age or pcor_age>b.valid_end_age
-;
+left join PCORNET_CDM.CDM_C010R022.PRIVATE_PRESCRIBING p on d.patid = p.patid
+where  (d.dx like '%K26%' or d.dx like '%K27.9%')  and  p.raw_rxnorm_cui in ('5640','1911','142442');
 
-//*Number of patients with discrepancies*//---5411
- SELECT count (distinct patid ) as coutpd 
-FROM (select  datediff(YY, d.birth_date, diagnosis.dx_date) as pcor_age, d.patid
-from "PCORNET_CDM"."CDM_C010R021"."DEMOGRAPHIC" as d
-LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS as diagnosis ON d.PATID = diagnosis.PATID
-LEFT JOIN ANALYTICSDB.QARULES.AGE_DX b ON (b.icd9code = diagnosis.dx or b.Alternate_Code = diagnosis.dx  or b.icd10code = diagnosis.dx)
-where dx_type in ('09', '10') and pcor_age< b.valid_beginning_age or pcor_age>b.valid_end_age
-);
+//*The number of records with discrepancies*//---
+select   d.patid, d.dx, d.dx_type,d.dx_date, d.admit_date, d.raw_diagnosis_name, p.rxnorm_cui, p.raw_rx_med_name,p.raw_rxnorm_cui, p.rx_start_date,p.rx_end_date
+from PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS d
+left join PCORNET_CDM.CDM_C010R022.PRIVATE_PRESCRIBING p on d.patid = p.patid
+where d.dx_date = p.rx_start_date and (d.dx like '%K26%' or d.dx like '%K27.9%') and  p.raw_rxnorm_cui in ('5640','1911','142442');
+
+
+//*Number of patients with discrepancies*//---31
+ select count (distinct d.patid)
+from PCORNET_CDM.CDM_C010R022.PRIVATE_DIAGNOSIS d---31
+
+left join PCORNET_CDM.CDM_C010R022.PRIVATE_PRESCRIBING p on d.patid = p.patid
+where  d.dx_date = p.rx_start_date and (d.dx like '%K26%' or d.dx like '%K27.9%')  and  p.raw_rxnorm_cui in ('5640','1911','142442');
+
 
 6. Inpatient only procedure
 

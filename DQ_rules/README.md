@@ -1,4 +1,4 @@
-# The Use of Validation Rules to Assess the Quality of the Patient Centered Outcome Research Network  Common Data Model (PCORnet CDM)
+# Tailoring Rule-Based Data Quality Assessment to the Patient-Centered Outcomes Research Network (PCORnet) Common Data Model (CDM) 
 ---
 ## Background
 Researchers are encouraged by the high capabilities of electronic health records (EHR) in capturing different types of data that can be used to conduct clinical research. However, data quality issues that may arise especially when combining multiple clinical sources of data need to be addressed before their use, and networks need to be transparent to report them. We will use a rule-based approach to run a quality check against the PCORnet CDM. The rules we used to conduct this study were designed and written by researchers at the University of Texas Health Science Center at San Antonio. These rules are composed of rule logic templates supported by knowledge tables to assist in their implementation.

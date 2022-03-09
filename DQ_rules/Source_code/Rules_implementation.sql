@@ -516,8 +516,7 @@ AND l.patid NOT IN (SELECT l.patid
 
 ---Nunber of patients with discrepancies
 
-SELECT COUNT(DISTINCT pp.patid)----32,465
-
+SELECT COUNT(DISTINCT pp.patid)
 FROM PCORNET_CDM.CDM_C010R022.PRIVATE_PRESCRIBING pp
 LEFT JOIN  PCORNET_CDM.CDM_C010R022.PRIVATE_LAB_RESULT_CM l ON l.encounterid = pp.encounterid
 LEFT JOIN ANALYTICSDB.QARULES.DRUG_MONITORING dm ON dm.drug_name =  pp.raw_rx_med_name
@@ -532,7 +531,7 @@ AND l.patid NOT IN (SELECT l.patid
 
 ---The number of whole cohort
 
-select count (distinct Patid) from PCORNET_CDM.CDM_C010R022.PRIVATE_PRESCRIBING;
+SELECT COUNT (DISTINCT Patid) FROM PCORNET_CDM.CDM_C010R022.PRIVATE_PRESCRIBING;
 
 ---The number of records with discrepancies
 

@@ -50,7 +50,8 @@ AND e.enc_type IN ('ED');
 SELECT COUNT (DISTINCT e.encounterid),
              e.enc_type, 
              date_part(YEAR, l.result_date) AS resultyear   
-FROM  PCORNET_CDM.CDM_C010R022.PRIVATE_LAB_RESULT_CM LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_ENCOUNTER e  ON e.encounterid = l.encounterid
+FROM  PCORNET_CDM.CDM_C010R022.PRIVATE_LAB_RESULT_CM 
+LEFT JOIN PCORNET_CDM.CDM_C010R022.PRIVATE_ENCOUNTER e  ON e.encounterid = l.encounterid
 WHERE l.result_num IS Null  
 AND (l.raw_result LIKE 'HEMOLYZED%' OR l.raw_result LIKE 'hem%' )      
 GROUP BY e.enc_type, resultyear

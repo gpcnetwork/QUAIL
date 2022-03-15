@@ -3,6 +3,9 @@
 ## Background
 Researchers are encouraged by the high capabilities of electronic health records (EHR) in capturing different types of data that can be used to conduct clinical research. However, data quality issues that may arise especially when combining multiple clinical sources of data need to be addressed before their use, and networks need to be transparent to report them. We will use a rule-based approach to run a quality check against the PCORnet CDM. The rules we used to conduct this study were designed and written by researchers at the University of Texas Health Science Center at San Antonio. These rules are composed of rule logic templates supported by knowledge tables to assist in their implementation.
 
+Copyright (c) 2022 Univeristy of Missouri 
+Share information according to the terms of the Apache 2.0 Open Source License.
+
 ## AIMS of the project 
 **AIM1**: Translate the rules to be compatible to run against PCORnet CDM. We will rewrite the rules according to the CDM table format using SQL language and run them against Missouri Health System data in PCORnet CDM and report the percentage of discrepancies.
 

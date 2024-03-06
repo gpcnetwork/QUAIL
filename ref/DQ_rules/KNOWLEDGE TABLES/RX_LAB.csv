@@ -1,0 +1,11 @@
+drug_name,rx_code,test_name,test_code,time_period
+Lamisil,217956,ALT,1743-4,
+Lamisil,217956,AST,1920-8,
+Lamisil,217956,GGT,2324-2,
+Methotrexate,6851,Albumin,1752-5, 6 months
+Methotrexate,6851,Creatine,2160-0, 6 months
+Methotrexate,6851,ALT,1743-4, 6 months
+Methotrexate,6851,AST,1920-8, 6 months
+Methotrexate,6851,GGT,2324-2, 6 months
+Prednisone,8640,GLU,1547-9,
+Prednisone,8640,HbA1c,17856-6,

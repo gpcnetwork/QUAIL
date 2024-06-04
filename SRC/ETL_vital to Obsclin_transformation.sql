@@ -814,7 +814,6 @@ SELECT * FROM IHC_vital_insert_DBP
 UNION
 SELECT * FROM IHC_vital_insert_SBP);
 
- ------------------------------------
 
 
 /*Modify colunm data type*/
@@ -851,11 +850,9 @@ select
 
 from GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.IHC_INSERT_OBSCLIN_VITAL_SIGNS
 ;
---------------
- 
 
 /*The final linked table*/
-create or replace table linked_ihc_vital_obsclin_table as
+CREATE OR REPLACE TABLE linked_ihc_vital_obsclin_table AS
 SELECT *
 FROM GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.MODIFIED_ihc_INSERT_IN_OBC_ALL
 UNION 

@@ -1,6 +1,8 @@
 
 
---Cleaning that update units and LOINC codes in the clean obsclin table
+## ---Cleaning of transformed obscene table to make all values, units, LOINC codes, and names of vital (WT, HT, BP,BMI) are consistent. 
+
+
 
 /////////////////////////////////////////////////////////////////////MU///////////////////////////////
    
@@ -171,6 +173,12 @@ raw_obsclin_result = CASE
 
 
 
+
+Create TABLE GROUSE_DB_QUAIL.PCORNET_CDM_ALLINA.DEID_OBS_CLIN
+CLONE GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.Allina_linked_vital_obsclin ;
+
+
+
 UPDATE GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.Allina_linked_vital_obsclin
 SET obsclin_result_num = CASE
                   
@@ -197,6 +205,13 @@ SET  obsclin_result_num = CASE
 ///////////////////////////////////////////IHC/////////////////////////////////////////////////
 
 
+
+
+Create TABLE GROUSE_DB_QUAIL.PCORNET_CDM_IHC.DEID_OBS_CLIN
+CLONE GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.linked_ihc_vital_obsclin_table ;
+
+
+
 UPDATE GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.linked_ihc_vital_obsclin_table
 SET raw_obsclin_result = CASE
                   
@@ -215,6 +230,16 @@ SET raw_obsclin_result = CASE
     
 //////////////////////////////////////////kumc////////////////////////////////////////////////////////////////
 
+
+
+
+Create TABLE GROUSE_DB_QUAIL.PCORNET_CDM_KUMC.DEID_OBS_CLIN
+CLONE GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.linked_kumc_obsclin ;
+
+
+-----
+create or replace table kumc_linked_vital_obsclin as
+ select * from GROUSE_DB.PCORNET_CDM_KUMC.V_DEID_OBS_CLIN;
 
 
 UPDATE GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.linked_kumc_obsclin
@@ -292,6 +317,13 @@ obsclin_type   = CASE
  
 ///////////////////////////////////////MCRI//////////////////////////////////////////////////////////////
 
+
+
+
+
+Create TABLE GROUSE_DB_QUAIL.PCORNET_CDM_MCRI.DEID_OBS_CLIN
+CLONE  GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.mcri_linked_vital_obsclin;
+
 UPDATE GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.mcri_linked_vital_obsclin
 SET obsclin_result_num = CASE
                   
@@ -306,10 +338,15 @@ SET obsclin_result_num = CASE
                  ELSE raw_obsclin_result
                  END;
 
-
-
 ////////////////////////////////////////////////MCW///////////////////////////////////////////////////////////////
 
+
+
+Create TABLE GROUSE_DB_QUAIL.PCORNET_CDM_MCW.DEID_OBS_CLIN
+CLONE  GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.MCW_linked_vital_obsclin;
+
+
+-------------
 
     
 UPDATE GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.MCW_linked_vital_obsclin
@@ -329,6 +366,14 @@ SET obsclin_result_num = CASE
 
 ///////////////////////////////////////////////UIOWA/////////////////////////////////////////////////////////////////
 
+
+
+Create TABLE GROUSE_DB_QUAIL.PCORNET_CDM_UIOWA.DEID_OBS_CLIN
+CLONE  GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.linked_uiowa_obsclin;
+
+------------
+create or replace table linked_uiowa_obsclin as 
+ select * from GROUSE_DB.PCORNET_CDM_UIOWA.V_DEID_OBS_CLIN;
 
 UPDATE GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.linked_uiowa_obsclin
 SET obsclin_result_num = CASE
@@ -372,6 +417,13 @@ SET obsclin_result_num = CASE
                   
 
 /////////////////////////////////////////////////UNMC////////////////////////////////////////////////////
+
+
+
+
+
+Create TABLE GROUSE_DB_QUAIL.PCORNET_CDM_UNMC.DEID_OBS_CLIN
+CLONE  GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.UNMC_linked_vital_obsclin_table;
 
  
 UPDATE GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.UNMC_linked_vital_obsclin_table
@@ -432,6 +484,11 @@ raw_obsclin_code   = CASE
                 
  /////////////////////////////////////////////UTHOUSTON/////////////////////////////////////////////////////////////////
 
+
+Create TABLE GROUSE_DB_QUAIL.PCORNET_CDM_UTHOUSTON.DEID_OBS_CLIN
+CLONE  GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.UTHOUSTON_LINKED_VITAL_OBSCLIN;
+
+------
  
 UPDATE GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.UTHOUSTON_LINKED_VITAL_OBSCLIN
 SET obsclin_result_num = CASE
@@ -548,9 +605,20 @@ obsclin_type   = CASE
               WHEN  (raw_obsclin_name) = 'Diastolic' THEN 'LC'
               ELSE obsclin_type
             END;
-            
+
+
+    
+
+;
 ------------------
 /////////////////////////////////////////////UTHSCSA//////////////////////////////////////////////////////////////
+
+
+
+Create TABLE GROUSE_DB_QUAIL.PCORNET_CDM_UTHSCSA.DEID_OBS_CLIN
+CLONE  GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.UTHSCSA_LINKED_VITAL_OBSCLIN;
+
+-----
 
 UPDATE GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.UTHSCSA_LINKED_VITAL_OBSCLIN
 SET obsclin_result_num = CASE
@@ -567,26 +635,19 @@ SET obsclin_result_num = CASE
              END;
             
 
-select count (distinct patid), raw_obsclin_name, obsclin_code, raw_obsclin_code, raw_obsclin_unit
-from GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.UTHSCSA_LINKED_VITAL_OBSCLIN
-where lower (raw_obsclin_name) like ('%weight%') 
-or lower (raw_obsclin_name) like ('%height%') 
-or lower (raw_obsclin_name) like ('%bmi%') 
-or lower (raw_obsclin_name) like ('%diastolic%') 
-or lower (raw_obsclin_name) like('%systolic%')
- group by raw_obsclin_name, obsclin_code,raw_obsclin_code, raw_obsclin_unit;
 
- SELECT * FROM GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.UTHSCSA_LINKED_VITAL_OBSCLIN
-where lower (raw_obsclin_name) like ('%heigh%') 
-or lower (raw_obsclin_name) like ('%weight%') 
-or lower (raw_obsclin_name) like ('%bmi%') 
-or lower (raw_obsclin_name) like ('%diastolic%') 
-or lower (raw_obsclin_name) like('%systolic%')
-LIMIT 10000;
 /////////////////////////////////////////////UTSW/////////////////////////////////////////////////////////////////
+
+
+
+
+Create TABLE GROUSE_DB_QUAIL.PCORNET_CDM_UTSW.DEID_OBS_CLIN
+CLONE GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.CLEANED_UTSW_OBSCLIN ;
+
+
 /*Create table for UTSW obsclin data*/
 CREATE OR REPLACE TABLE  CLEANED_UTSW_OBSCLIN AS 
-SELECT * FROM GROUSE_DB.PCORNET_CDM_UTSW.LDS_OBS_CLIN;
+SELECT * FROM GROUSE_DB.PCORNET_CDM_UTSW.V_DEID_OBS_CLIN;
 
 UPDATE GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.CLEANED_UTSW_OBSCLIN
 SET obsclin_result_num = CASE
@@ -634,7 +695,12 @@ raw_obsclin_code  = CASE
 
 /////////////////////////////////////////////////////////UU//////////////////////////////////////////////////////////////////
 
- 
+
+
+
+Create TABLE GROUSE_DB_QUAIL.PCORNET_CDM_UU.DEID_OBS_CLIN
+CLONE GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.UU_LINKED_VITAL_OBSCLIN ;
+ -----------------
 UPDATE GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.UU_LINKED_VITAL_OBSCLIN
 SET obsclin_result_num = CASE
                   
@@ -650,6 +716,13 @@ SET obsclin_result_num = CASE
 
 
 
+Create TABLE GROUSE_DB_QUAIL.PCORNET_CDM_WASHU.DEID_OBS_CLIN
+CLONE GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.WHASHU_OBSCLIN_VITAL ;
+
+select * from GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.WHASHU_OBSCLIN_VITAL
+limit 1000;
+
+--------------
 UPDATE GROUSE_DB_QUAIL.DQ_CLEAN_TABLE.WHASHU_OBSCLIN_VITAL
 SET obsclin_result_num = CASE
                   WHEN  (raw_obsclin_name) = 'Body height' THEN Round (obsclin_result_num*2.54,1)

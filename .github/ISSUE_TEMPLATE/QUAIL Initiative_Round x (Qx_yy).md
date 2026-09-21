@@ -1,7 +1,7 @@
 ---
 name: QUAIL Initiative Rounds
 about: To advance data quality within GPC.
-title: 'QUAIL Initiative_Round x (Qx_yy)-Due xx'
+title: '#Story: QUAIL Initiative_Round x (Qx_yy)-Due xx'
 labels: ''
 assignees: ''
 

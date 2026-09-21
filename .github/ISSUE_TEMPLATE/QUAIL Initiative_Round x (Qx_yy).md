@@ -16,7 +16,7 @@ assignees: ''
 - [ ] QUAIL Initiative _ Round 1 (Q4_26) - Due xxx - UIOWA
 - [ ] QUAIL Initiative _ Round 1 (Q4_26) - Due xxx - UNMC
 - [ ] QUAIL Initiative _ Round 1 (Q4_26) - Due xxx - UTAH
-- [ ] QUAIL Initiative _ Round 1 (Q4_26)5 - Due xxx - UTH
+- [ ] QUAIL Initiative _ Round 1 (Q4_26) - Due xxx - UTH
 - [ ] QUAIL Initiative _ Round 1 (Q4_26) - Due xxx - UTSW
 - [ ] QUAIL Initiative _ Round 1 (Q4_26) - Due xxx - UCLA
 - [ ] QUAIL Initiative _ Round 1 (Q4_26) - Due xxx - UCDavis

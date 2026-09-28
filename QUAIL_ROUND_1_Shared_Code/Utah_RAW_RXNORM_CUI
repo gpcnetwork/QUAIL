@@ -1,0 +1,21 @@
+
+---
+SELECT OM.ORDER_MED_ID 
+,OM.MEDICATION_ID
+,RC.*
+FROM CLARITY.ORDER_MED OM
+INNER JOIN CLARITY.RXNORM_CODES RC
+    ON OM.MEDICATION_ID = RC.MEDICATION_ID
+WHERE RXNORM_HISTORIC_YN IS NULL
+-- WOULD NEED TO FURTHER FILTER ON THE RXNORM_CODE_LEVEL_C/RXNORM_TERM_TYPE_C
+---
+
+These are the steps we'd take if we'd extract the RAW_RXNORM_CUI via CLARITY. As of now, we use a datamart developed by our wider EDW team. Our personal code looks like:
+
+In ETL: CONCEPT_CD AS RAW_RXNORM_CUI
+Our two sources are selected into the CONCEPT_CD as:
+SELECT RXNORM_MED_MAPPING.RXNORM_CODE_NORMALIZED AS 'RXNORM_NORM:'  || RXNORM_CODE_NORMALIZED  FROM PHARM_DATA.RXNORM_MED_MAPPING
+SELECT RXNORM_CODE_ORIG  AS 'RXNORM:'  || RXNORM_CODE_ORIG FROM PHARM_DATA.RXNORM_MED_MAPPING;
+
+The table PHARM_DATA.RXNORM_MED_MAPPING contains what we map to the CONCEPT_CD in both scenarios.
+Reach out to Jackson.Barlocker@hsc.utah.edu if you have questions.

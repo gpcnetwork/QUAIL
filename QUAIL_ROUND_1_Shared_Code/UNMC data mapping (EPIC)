@@ -1,0 +1,7 @@
+RAW_NDC (DISPENSING table) is populated using data from Clarity MED_DISPENSE.EXT_DRUD_ID_STR
+RAW_RX_MED_NAME (PRESCRIBING table) is populated using data from Clarity CLARITY_MEDICATION.NAME
+RAW_RXNORM_CUI (PRESCRIBING table) is populated using data from Clarity ORDER_MED.MEDICATION_ID
+RAW_RX_NDC (PRESCRIBING table) is not populated
+RAW_MEDADMIN_MED_NAME (MED_ADMIN table) is populated using data from Clarity CLARITY_MEDICATION.NAME
+
+Please contact gviswanathan@unmc.edu for any questions.

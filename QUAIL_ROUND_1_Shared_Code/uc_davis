@@ -1,0 +1,143 @@
+
+This is Clarity code that provides staging tables for our OMOP.  We extract PCORnet from OMOP.   I am not sure if this code is helpful, but I suppose worth posting.  I have been delayed on this work, sorry
+
+/* Dispensed Medications */
+
+SELECT  
+	p.pat_mrn_id,
+	m.ext_drug_disp_inst_dttm,
+	m.written_date,
+	cast(m.ext_med_erx_id as varchar(50)) as ext_med_erx_id,
+	m.ext_drug_unit_str,
+	m.ext_drug_disp_amt,
+	m.ext_med_day_supply,
+	m.ext_med_ordprov_id,
+	m.ext_med_ord_id,
+	m.ext_drud_id_str AS ndc,
+	rx.package_size,
+	rx.package_quantity,
+	m.ext_med_ref_remain,
+	p.NPI AS pharmacy_npi,
+	m.ext_drug_prov_name AS pharmacy_name,
+	om3.ORDER_TIME,
+	om.ORD_PROV_ID,
+	om.AUTHRZING_PROV_ID
+FROM med_dispense m 
+    INNER JOIN docs_rcvd r 
+        ON m.document_id = r.document_id
+	LEFT JOIN rx_ndc rx 
+		ON m.ext_drud_id_str = rx.raw_11_digit_ndc
+	LEFT JOIN ORDER_MED_3 om3
+		ON m.ext_med_ord_id = om3.ORDER_ID
+    INNER JOIN patient p
+        ON r.pat_id = p.pat_id
+	LEFT JOIN rx_phr p 
+		ON m.ext_drug_dspprov_id = p.pharmacy_id
+	LEFT JOIN ORDER_MED om
+        ON om3.ORDER_ID = om.ORDER_MED_ID
+WHERE m.ext_drug_disp_inst_dttm IS NOT NULL
+	AND m.ext_med_msg_type_c = 1 
+	AND m.ext_drug_disp_inst_dttm >= TO_DATE('01/01/2012','MM-DD-YYYY')
+
+
+
+/*Clarity Inpatient Administrations*/
+
+SELECT 
+ /*+PARALLEL(12) */ 
+	MAR_ADMIN_INFO.ORDER_MED_ID,
+	ORDER_MED.PAT_ID,
+	MAR_ADMIN_INFO.MAR_ENC_CSN,
+	MAR_ADMIN_INFO.LINE,
+	MAR_ADMIN_INFO.TAKEN_TIME,
+	MAR_ADMIN_INFO.MAR_DURATION, 
+    ZC_MED_DURATION_UN.NAME AS MAR_DURATION_UNIT, 
+	ORDER_MED.MEDICATION_ID,
+	MAR_ADMIN_INFO.SIG,
+	MAR_ADMIN_INFO.DOSE_UNIT_C,
+	ZC_MED_UNIT.Name AS MED_UNIT,
+	MAR_ADMIN_INFO.PAT_SUPPLIED_YN, 
+	MAR_ADMIN_INFO.MAR_ACTION_C,
+	ZC_MAR_RSLT.Name AS MAR_ACTION,
+	ORDER_MED.ORD_PROV_ID,
+    ORDER_MED.AUTHRZING_PROV_ID,
+	ScannedNdc.raw_11_digit_ndc AS Admin_NDC, 
+	PreppedNdc.raw_11_digit_ndc AS Prep_NDC,
+	DispensedNdc.raw_11_digit_ndc AS Dispense_NDC,
+	COALESCE(ScannedNdc.raw_11_digit_ndc, PreppedNdc.raw_11_digit_ndc,DispensedNdc.raw_11_digit_ndc) as NDC_Lookup,
+	OMC.COMP_COST,
+	OMC.COMP_CHARGE,
+	p.PHARMACY_NAME,
+	p.npi AS PHARMACY_NPI,
+    STANDARD_HASH(
+		NVL(TO_CHAR(MAR_ADMIN_INFO.ORDER_MED_ID), '')|| '|'
+		|| NVL(TO_CHAR(ORDER_MED.PAT_ID), '')|| '|'
+		|| NVL(TO_CHAR(MAR_ADMIN_INFO.MAR_ENC_CSN), '')|| '|'
+		|| NVL(TO_CHAR(MAR_ADMIN_INFO.LINE), '')|| '|'
+		|| NVL(TO_CHAR(MAR_ADMIN_INFO.TAKEN_TIME), '')|| '|'
+		|| NVL(TO_CHAR(ORDER_MED.MEDICATION_ID), '')|| '|'
+		|| NVL(TO_CHAR(MAR_ADMIN_INFO.SIG), '')|| '|'
+		|| NVL(TO_CHAR(COALESCE(ScannedNdc.raw_11_digit_ndc, PreppedNdc.raw_11_digit_ndc,DispensedNdc.raw_11_digit_ndc)), '')|| '|'
+		|| NVL(TO_CHAR(MAR_ADMIN_INFO.MAR_ACTION_C), '')|| '|'
+		|| NVL(TO_CHAR(OMC.COMP_COST), '')|| '|'
+		|| NVL(TO_CHAR(OMC.COMP_CHARGE), '')
+	,'SHA256') AS LookupHash,
+	ORDER_MED_3.ORDER_TIME,
+	   O4.UNROUNDED_DOSE_MIN,
+	   O4.UNROUNDED_DOSE_MAX,
+	   MU2.NAME AS UNROUNDED_DOSAGE_UNIT
+  FROM MAR_ADMIN_INFO 
+    INNER JOIN ORDER_MED 
+		ON MAR_ADMIN_INFO.ORDER_MED_ID = ORDER_MED.ORDER_MED_ID 
+			AND MAR_ADMIN_INFO.TAKEN_TIME IS NOT NULL
+	LEFT JOIN ORDER_MED_3
+		ON ORDER_MED.ORDER_MED_ID = ORDER_MED_3.ORDER_ID
+    LEFT JOIN ZC_MED_DURATION_UN 
+	    ON MAR_ADMIN_INFO.MAR_DURATION_UNIT_C = ZC_MED_DURATION_UN.MED_DURATION_UN_C
+    /*Scanned NDCs*/
+    LEFT OUTER JOIN MAR_ADDL_INFO
+		ON ORDER_MED.ORDER_MED_ID = MAR_ADDL_INFO.ORDER_ID
+			AND (121531 - MAR_ADMIN_INFO.MAR_ORD_DAT) = MAR_ADDL_INFO.CONTACT_DATE_REAL
+			AND MAR_ADDL_INFO.LINE = 1
+	LEFT OUTER JOIN RX_NDC_STATUS ScannedNdcStatus 
+		ON MAR_ADDL_INFO.NDC_CSN_ID = ScannedNdcStatus.CNCT_SERIAL_NUM
+	LEFT OUTER JOIN RX_NDC ScannedNdc ON ScannedNdcStatus.NDC_ID = ScannedNdc.NDC_ID
+       /*Prepped NDCs*/
+	LEFT OUTER JOIN ORD_DISPENSE_PREP
+		ON ORDER_MED.ORDER_MED_ID = ORD_DISPENSE_PREP.ORDER_ID
+			AND (121531 - MAR_ADMIN_INFO.MAR_ORD_DAT) = ORD_DISPENSE_PREP.CONTACT_DATE_REAL
+			AND ORD_DISPENSE_PREP.LINE = 1
+	LEFT OUTER JOIN RX_NDC_STATUS PreppedNdcStatus ON ORD_DISPENSE_PREP.NDC_CSN = PreppedNdcStatus.CNCT_SERIAL_NUM
+	LEFT OUTER JOIN RX_NDC PreppedNdc ON PreppedNdcStatus.NDC_ID = PreppedNdc.NDC_ID
+	/*Dispensed NDCs*/
+	LEFT OUTER JOIN ORDER_DISP_INFO
+		ON ORDER_MED.ORDER_MED_ID = ORDER_DISP_INFO.ORDER_MED_ID
+			AND (121531 - MAR_ADMIN_INFO.MAR_ORD_DAT) = ORDER_DISP_INFO.CONTACT_DATE_REAL
+	LEFT OUTER JOIN RX_PHR p
+		ON ORDER_DISP_INFO.dispense_phr_id = p.PHARMACY_ID
+	LEFT OUTER JOIN ORDER_DISP_MEDS 
+		ON ORDER_MED.ORDER_MED_ID = ORDER_DISP_MEDS.ORDER_MED_ID
+			AND ORDER_DISP_INFO.DISP_MED_CNTCT_ID = ORDER_DISP_MEDS.CONTACT_DATE_REAL
+			AND ORDER_DISP_MEDS.LINE = 1
+	LEFT OUTER JOIN RX_NDC_STATUS DispensedNdcStatus 
+		ON ORDER_DISP_MEDS.DISP_NDC_CSN = DispensedNdcStatus.CNCT_SERIAL_NUM
+	LEFT OUTER JOIN RX_NDC DispensedNdc 
+		ON DispensedNdcStatus.NDC_ID = DispensedNdc.NDC_ID
+	LEFT JOIN ZC_MED_UNIT 
+		ON ZC_MED_UNIT.DISP_QTYUNIT_C = MAR_ADMIN_INFO.DOSE_UNIT_C
+	LEFT JOIN ZC_MAR_RSLT 
+		ON ZC_MAR_RSLT.RESULT_C = MAR_ADMIN_INFO.MAR_ACTION_C
+	LEFT JOIN order_med_charge OMC
+		ON ORDER_DISP_MEDS.order_med_id = OMC.order_med_id 
+			AND ORDER_DISP_MEDS.disp_med_id = OMC.disp_med_id
+			AND ORDER_DISP_MEDS.contact_date_real = OMC.contact_date_real
+			AND ORDER_DISP_MEDS.LINE = OMC.LINE
+	LEFT JOIN  ORDER_MED_4 O4 
+	    ON O4.ORDER_ID = ORDER_MED.ORDER_MED_ID
+	LEFT JOIN ZC_MED_UNIT MU2 
+	    ON O4.UNROUND_DOSE_UNIT_C = MU2.DISP_QTYUNIT_C
+WHERE MAR_ADMIN_INFO.MAR_ACTION_C IN (SELECT "Code"
+		FROM VALUESET
+		WHERE "Vocabulary" = 'MAR Action' AND "ValueSetName" = 'UCD - Local Value Sets - OMOP MAR Action Inclusions')
+--(1,6,1070000,323044,323063,323064,323061,323062,323043,323054,323066,323039)
+AND MAR_ADMIN_INFO.TAKEN_TIME >= TO_DATE('01/01/2012','MM-DD-YYYY')

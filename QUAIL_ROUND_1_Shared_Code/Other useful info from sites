@@ -1,0 +1,1 @@
+UIowa: populate RAW_RX_MED_NAME (PRESCRIBING table): simply derives those values from the Clarity_medication table.

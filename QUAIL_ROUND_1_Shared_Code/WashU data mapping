@@ -1,0 +1,10 @@
+
+RAW_NDC (DISPENSING table): no information as we don't populate the dispensing table in the CDM.
+RAW_RX_MED_NAME (PRESCRIBING table): is populated using data from table: CLARITY_MEDICATION
+RAW_RXNORM_CUI (PRESCRIBING table): is populated using data from tables: CLARITY_MEDICATION, RXNORM_CODES 
+RAW_RX_NDC (PRESCRIBING table): is not populated using data from tables: CLARITY_MEDICATION, RX_NDC_STATUS, RX_NDC 
+RAW_MEDADMIN_MED_NAME (MED_ADMIN table): is populated using data from table: CLARITY_MEDICATION
+
+Note: WU team also manually mapped EPIC medication_id to NDC and RXNORM codes where there was none available in tables mentioned above. 
+
+Please contact sgupta24@wustl.edu for any questions.
